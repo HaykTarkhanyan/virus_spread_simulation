@@ -3,18 +3,16 @@ Written by Hayk Aprikyan and Hayk Tarkhanyan
 
 Date finished - 11.04.2020
 """
-
 import random
 import numpy as np
 from plot_utils import plot_data
 
-
 BOARD_HEIGHT = 100
 BOARD_WIDTH = 100
 
-INFECTION_CHANCE = 1
+INFECTION_CHANCE = 0.8
 INFECTING_OPTION = "line"
-INITIAL_INFECTED = 1
+INITIAL_INFECTED = 5
 VIRUS_SEVERNES = 0.3
 
 RECOVERY_RATE = 0.3
@@ -33,6 +31,11 @@ vir_sev = VIRUS_SEVERNES
 inf_chance = INFECTION_CHANCE
 
 PLOT_RESULTS = True
+
+### es avelacrac a ###
+BOARD_HISTORY = []
+SHUFFLE_HISTORY = []
+SHUFFLE_COUNT = 0
 
 
 def initialize_board(width, height):
@@ -111,6 +114,9 @@ def fully_recover(person):
     person - list, tuple, or array,  indicates persons location on the board
     """
     RECOVERED.append(person)
+    #############
+    BOARD[person[0]][person[1]] = 69
+    #############
     INFECTED.remove(person)
 
 
@@ -171,6 +177,10 @@ def shuffle(people):
         placeholder = BOARD[new[0], new[1]]
         BOARD[new[0], new[1]] = BOARD[old[0], old[1]]
         BOARD[old[0], old[1]] = placeholder
+
+    ##### avelacrac ####
+    # print("shudddddled", [people, all_new_locations])
+    return [people, all_new_locations]
 
 
 def infect_neighbors(person, option=INFECTING_OPTION):
@@ -284,15 +294,15 @@ def multiple_recover(infecteds, mu=RECOVERY_RATE, sigma=RECOVERY_RATE / 2):
 
 
 def run_simulation(shuffle_every=1,
-                   shuffle_qunatity=BOARD_HEIGHT * BOARD_WIDTH // 100,
-                   transportation_drop=3, infection_drop=2, output=True):
+                   shuffle_qunatity=BOARD_HEIGHT * BOARD_WIDTH // 10,
+                   transportation_drop=3, infection_drop=2, output=False):
     """
     gathes all the helper function in one place and runs one single iteration of pandemic
 
     """
 
     global BOARD, INFECTED, DEAD, RECOVERED, ALL_ALIVE, VIRUS_SEVERNES, \
-        SEVERNESS_DECAY, RECOVERY_RATE, INFECTION_CHANCE
+        SEVERNESS_DECAY, RECOVERY_RATE, INFECTION_CHANCE, SHUFFLE_COUNT
 
     num_all_people = BOARD_HEIGHT * BOARD_WIDTH
     # stuff needed for visualizations
@@ -339,7 +349,19 @@ def run_simulation(shuffle_every=1,
             if len(ALL_ALIVE) >= shuffle_qunatity * 2:
                 people_to_shuffle = random.sample(ALL_ALIVE, shuffle_qunatity)
 
-                shuffle(people_to_shuffle)
+                shuffled = shuffle(people_to_shuffle)
+
+                group = []
+                for a in range(0, BOARD_WIDTH):
+                    for b in range(0, BOARD_HEIGHT):
+                        group.append([a, b])
+
+                for a, b in zip(shuffled[0], shuffled[1]):
+                    group[group.index(a)] = b
+                    group[group.index(b)] = a
+
+                SHUFFLE_HISTORY.append(group)
+                SHUFFLE_COUNT += 1
 
         if i >= START_DEEPENING:
             multiple_deepen(INFECTED)
@@ -356,17 +378,19 @@ def run_simulation(shuffle_every=1,
         rec.append(len(RECOVERED))
 
         BOARD = BOARD.round(2)
-
+        ###################################
+        BOARD_HISTORY.append(BOARD)
         if output:
             print("Day {}".format(i))
             print(BOARD)
             print("Num infected: {}".format(len(INFECTED)))
             print("Num dead: {}".format(len(DEAD)))
             print("Num recovered: {}".format(len(RECOVERED)))
+            #print("Num alive: {}".format(len(ALL_ALIVE)))
 
         # es arji hanel
         if len(DEAD) + len(INFECTED) + len(RECOVERED) > BOARD_HEIGHT * BOARD_WIDTH:
-            raise Exception("Turns out we left a big!!!!")
+            raise Exception("Turns out we left a bug!!!!")
 
         if len(DEAD) == num_all_people:
             if output:
@@ -379,7 +403,6 @@ def run_simulation(shuffle_every=1,
 
             if output:
                 print(f"All revovered. Took {i} days")
-
             return [inf, dead, rec]
 
         if output:
@@ -388,11 +411,10 @@ def run_simulation(shuffle_every=1,
         i += 1
 
 
-if __name__ == "__main__":
-    inf, dead, rec = run_simulation(3, output=True)
+inf, dead, rec = run_simulation(3, output=False)
 
-    if PLOT_RESULTS:
-        print("plotting data")
-        plot_data(inf, dead, rec, START_EMERGENCY, START_DEEPENING,
-                  START_RECOVERING, vir_sev, inf_chance)
-        print("Saved plots")
+if PLOT_RESULTS:
+    print("plotting data")
+    plot_data(inf, dead, rec, START_EMERGENCY, START_DEEPENING,
+              START_RECOVERING, vir_sev, inf_chance)
+    print("Saved plots")

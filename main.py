@@ -7,27 +7,27 @@ import random
 import numpy as np
 from plot_utils import plot_data
 
-BOARD_HEIGHT = 100
-BOARD_WIDTH = 100
+BOARD_HEIGHT = 50
+BOARD_WIDTH = 50
 
-INFECTION_CHANCE = 0.8
+INFECTION_CHANCE = 0.9
 INFECTING_OPTION = "line"
-INITIAL_INFECTED = 5
-VIRUS_SEVERNES = 0.3
+INITIAL_INFECTED = 2
+SEVERNES = 0.3
 
 RECOVERY_RATE = 0.3
 SEVERNESS_DECAY = 0.95
 
-START_DEEPENING = 1
-START_EMERGENCY = 7
-START_RECOVERING = 10
+START_DEEPENING = 4
+START_EMERGENCY = 8
+START_RECOVERING = 9
 
 INFECTED = []
 RECOVERED = []
 DEAD = []
 ALL_ALIVE = [[i, j] for i in range(BOARD_HEIGHT) for j in range(BOARD_WIDTH)]
 
-vir_sev = VIRUS_SEVERNES
+vir_sev = SEVERNES
 inf_chance = INFECTION_CHANCE
 
 PLOT_RESULTS = True
@@ -50,7 +50,7 @@ def initialize_board(width, height):
 BOARD = initialize_board(BOARD_HEIGHT, BOARD_WIDTH)
 
 
-def infect(person, dose_min=VIRUS_SEVERNES, dose_dev=VIRUS_SEVERNES / 2):
+def infect(person, dose_min=SEVERNES, dose_dev=SEVERNES / 2):
     """
     Increases a healthy person's level of
     infection with some initial random dose.
@@ -58,11 +58,11 @@ def infect(person, dose_min=VIRUS_SEVERNES, dose_dev=VIRUS_SEVERNES / 2):
     ARGS :
     person - list, tuple, or array,  indicates persons location on the board
     dose_min - float or int, is the mu paramtrs of gaussian distrib.
-               default calue - VIRUS_SEVERNESS
+               default calue - SEVERNESS
     dose_dev - float or int, is the sigma paramtrs of gaussian distrib.
-               default calue - VIRUS_SEVERNESS / 2
+               default calue - SEVERNESS / 2
     """
-    global VIRUS_SEVERNES
+    global SEVERNES
 
     # we make the assumption that person can be infected only once
     if [person[0], person[1]] not in RECOVERED:
@@ -244,7 +244,7 @@ def spread_pandemic(infecteds):
         infect_neighbors(i, INFECTING_OPTION)
 
 
-def deepen_disease(person, mu=VIRUS_SEVERNES, sigma=VIRUS_SEVERNES / 2):
+def deepen_disease(person, mu=SEVERNES, sigma=SEVERNES / 2):
     """
     Increments person's disease with normal
     distribution, with given mu and sigma.
@@ -256,7 +256,7 @@ def deepen_disease(person, mu=VIRUS_SEVERNES, sigma=VIRUS_SEVERNES / 2):
         die(person)
 
 
-def multiple_deepen(infecteds, mu=VIRUS_SEVERNES, sigma=VIRUS_SEVERNES / 2):
+def multiple_deepen(infecteds, mu=SEVERNES, sigma=SEVERNES / 2):
     """
     Deepens everyone's disease, calling
     deepen_disease() with given mu and
@@ -301,7 +301,7 @@ def run_simulation(shuffle_every=1,
 
     """
 
-    global BOARD, INFECTED, DEAD, RECOVERED, ALL_ALIVE, VIRUS_SEVERNES, \
+    global BOARD, INFECTED, DEAD, RECOVERED, ALL_ALIVE, SEVERNES, \
         SEVERNESS_DECAY, RECOVERY_RATE, INFECTION_CHANCE, SHUFFLE_COUNT
 
     num_all_people = BOARD_HEIGHT * BOARD_WIDTH
@@ -318,7 +318,7 @@ def run_simulation(shuffle_every=1,
         print(f'Deepening start - {START_DEEPENING}')
         print(f'Recovering start - {START_RECOVERING}')
         print("-" * 35)
-        print(f'Virus severness - {VIRUS_SEVERNES}')
+        print(f'Virus severness - {SEVERNES}')
         print(f'Virus severness decay - {SEVERNESS_DECAY}')
         print("-" * 35)
         print(f'Infection chance - {INFECTION_CHANCE}')
@@ -369,7 +369,7 @@ def run_simulation(shuffle_every=1,
         if i >= START_RECOVERING:
             multiple_recover(INFECTED)
             # decreas severness so that more people will recover
-            VIRUS_SEVERNES *= SEVERNESS_DECAY ** (i - START_RECOVERING)
+            SEVERNES *= SEVERNESS_DECAY ** (i - START_RECOVERING)
 
         spread_pandemic(INFECTED)
 

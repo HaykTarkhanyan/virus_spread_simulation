@@ -2,7 +2,7 @@ This is a toy simulation of how a virus spreads.
 Note: Since writing argparser is boring, you will need to open main.py, change globals and enjoy the simulation.
 We start with a given size of board and number of infected people (default: 1)
 
-![vir_sim](https://github.com/HaykTarkhanyan/virus_spread_simulation/edit/master/moviee.gif)
+![vir_sim](https://github.com/HaykTarkhanyan/virus_spread_simulation/blob/master/moviee.gif)
 
 We have following parameters to play with
 BOARD_HEIGHT (default: 50)

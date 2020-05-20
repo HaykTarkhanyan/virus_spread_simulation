@@ -13,10 +13,10 @@ BOARD_WIDTH = 50
 INFECTION_CHANCE = 0.9
 INFECTING_OPTION = "line"
 INITIAL_INFECTED = 2
-SEVERNES = 0.3
+SEVERENESS = 0.3
 
 RECOVERY_RATE = 0.3
-SEVERNESS_DECAY = 0.95
+SEVERENESS_DECAY = 0.95
 
 START_DEEPENING = 4
 START_EMERGENCY = 8
@@ -27,16 +27,10 @@ RECOVERED = []
 DEAD = []
 ALL_ALIVE = [[i, j] for i in range(BOARD_HEIGHT) for j in range(BOARD_WIDTH)]
 
-vir_sev = SEVERNES
+vir_sev = SEVERENESS
 inf_chance = INFECTION_CHANCE
 
 PLOT_RESULTS = True
-
-### es avelacrac a ###
-BOARD_HISTORY = []
-SHUFFLE_HISTORY = []
-SHUFFLE_COUNT = 0
-
 
 def initialize_board(width, height):
     """
@@ -49,8 +43,12 @@ def initialize_board(width, height):
 
 BOARD = initialize_board(BOARD_HEIGHT, BOARD_WIDTH)
 
+# This tool will help us later
+BOARD_HISTORY = [BOARD]
+SHUFFLE_HISTORY = [[]]
+SHUFFLE_COUNT = 0
 
-def infect(person, dose_min=SEVERNES, dose_dev=SEVERNES / 2):
+def infect(person, dose_min=SEVERENESS, dose_dev=SEVERENESS / 2):
     """
     Increases a healthy person's level of
     infection with some initial random dose.
@@ -58,11 +56,11 @@ def infect(person, dose_min=SEVERNES, dose_dev=SEVERNES / 2):
     ARGS :
     person - list, tuple, or array,  indicates persons location on the board
     dose_min - float or int, is the mu paramtrs of gaussian distrib.
-               default calue - SEVERNESS
+               default calue - SEVERENESS
     dose_dev - float or int, is the sigma paramtrs of gaussian distrib.
-               default calue - SEVERNESS / 2
+               default calue - SEVERENESS / 2
     """
-    global SEVERNES
+    global SEVERENESS
 
     # we make the assumption that person can be infected only once
     if [person[0], person[1]] not in RECOVERED:
@@ -95,14 +93,13 @@ def die(person):
     Kills a person with value 1 or greater,
 
     ARGS:
-    person - list, tuple, or array,  indicates persons location on the board
+    person - list, tuple, or array,
+    indicates person's location on the board
     """
     DEAD.append(person)
     INFECTED.remove(person)
     if person in ALL_ALIVE:
         ALL_ALIVE.remove(person)
-    else:
-        raise Warning(f"Person {person} wasn't found in ALL_ALIVE")
 
 
 def fully_recover(person):
@@ -111,7 +108,8 @@ def fully_recover(person):
     given his location, tuple, list or array.
 
     ARGS:
-    person - list, tuple, or array,  indicates persons location on the board
+    person - list, tuple, or array,
+    indicates persons location on the board
     """
     RECOVERED.append(person)
     #############
@@ -178,8 +176,6 @@ def shuffle(people):
         BOARD[new[0], new[1]] = BOARD[old[0], old[1]]
         BOARD[old[0], old[1]] = placeholder
 
-    ##### avelacrac ####
-    # print("shudddddled", [people, all_new_locations])
     return [people, all_new_locations]
 
 
@@ -189,11 +185,12 @@ def infect_neighbors(person, option=INFECTING_OPTION):
 
     Arguments:
 
-    person - list, tuple, or array,  indicates persons location on the board
-    Option (default=INFECTING_OPTION): defines the common
+    person: list, tuple, or array, 
+    indicates person's location on the board
+    option (default=INFECTING_OPTION): defines the common
     element of two neighbors. Values: ["line", "point"].
     '''
-    # make understandable this
+    
     if option == "point":
         neighbors = np.array([(i, j)
                               for i in range(person[0] - 1, person[0] + 2)
@@ -211,9 +208,7 @@ def infect_neighbors(person, option=INFECTING_OPTION):
                               and BOARD[i, j] == 0])
 
     else:
-        # add 3rd option where you infect by line with inf_chance, and those
-        # who share point but not line with inf_chance//2
-        raise Exception("Wrond type, choose either 'line' or 'point'")
+        raise Exception("Wrong type, choose either 'line' or 'point'")
 
     multiple_infect(neighbors)
 
@@ -244,7 +239,7 @@ def spread_pandemic(infecteds):
         infect_neighbors(i, INFECTING_OPTION)
 
 
-def deepen_disease(person, mu=SEVERNES, sigma=SEVERNES / 2):
+def deepen_disease(person, mu=SEVERENESS, sigma=SEVERENESS / 2):
     """
     Increments person's disease with normal
     distribution, with given mu and sigma.
@@ -256,7 +251,7 @@ def deepen_disease(person, mu=SEVERNES, sigma=SEVERNES / 2):
         die(person)
 
 
-def multiple_deepen(infecteds, mu=SEVERNES, sigma=SEVERNES / 2):
+def multiple_deepen(infecteds, mu=SEVERENESS, sigma=SEVERENESS / 2):
     """
     Deepens everyone's disease, calling
     deepen_disease() with given mu and
@@ -283,8 +278,8 @@ def multiple_recover(infecteds, mu=RECOVERY_RATE, sigma=RECOVERY_RATE / 2):
 
     Args:
 
-    Infecteds -np.array, or list of tuples
-    coefficent, sigma - integers(for gaussina distrib.)
+    infecteds - np.array, or list of tuples
+    coefficent, sigma - Gaussian distribution parameters
 
     """
     for infected in infecteds[:]:
@@ -297,12 +292,12 @@ def run_simulation(shuffle_every=1,
                    shuffle_qunatity=BOARD_HEIGHT * BOARD_WIDTH // 10,
                    transportation_drop=3, infection_drop=2, output=False):
     """
-    gathes all the helper function in one place and runs one single iteration of pandemic
-
+    Gathers all the helper function in one place
+    and runs one single iteration of pandemic
     """
 
-    global BOARD, INFECTED, DEAD, RECOVERED, ALL_ALIVE, SEVERNES, \
-        SEVERNESS_DECAY, RECOVERY_RATE, INFECTION_CHANCE, SHUFFLE_COUNT
+    global BOARD, INFECTED, DEAD, RECOVERED, ALL_ALIVE, SEVERENESS, \
+        SEVERENESS_DECAY, RECOVERY_RATE, INFECTION_CHANCE, SHUFFLE_COUNT
 
     num_all_people = BOARD_HEIGHT * BOARD_WIDTH
     # stuff needed for visualizations
@@ -318,8 +313,8 @@ def run_simulation(shuffle_every=1,
         print(f'Deepening start - {START_DEEPENING}')
         print(f'Recovering start - {START_RECOVERING}')
         print("-" * 35)
-        print(f'Virus severness - {SEVERNES}')
-        print(f'Virus severness decay - {SEVERNESS_DECAY}')
+        print(f'Virus severeness - {SEVERENESS}')
+        print(f'Virus severeness decay - {SEVERENESS_DECAY}')
         print("-" * 35)
         print(f'Infection chance - {INFECTION_CHANCE}')
         print(f'Initial infecteds - {INITIAL_INFECTED}')
@@ -368,8 +363,8 @@ def run_simulation(shuffle_every=1,
 
         if i >= START_RECOVERING:
             multiple_recover(INFECTED)
-            # decreas severness so that more people will recover
-            SEVERNES *= SEVERNESS_DECAY ** (i - START_RECOVERING)
+            # decreas severeness so that more people will recover
+            SEVERENESS *= SEVERENESS_DECAY ** (i - START_RECOVERING)
 
         spread_pandemic(INFECTED)
 
@@ -386,11 +381,6 @@ def run_simulation(shuffle_every=1,
             print("Num infected: {}".format(len(INFECTED)))
             print("Num dead: {}".format(len(DEAD)))
             print("Num recovered: {}".format(len(RECOVERED)))
-            #print("Num alive: {}".format(len(ALL_ALIVE)))
-
-        # es arji hanel
-        if len(DEAD) + len(INFECTED) + len(RECOVERED) > BOARD_HEIGHT * BOARD_WIDTH:
-            raise Exception("Turns out we left a bug!!!!")
 
         if len(DEAD) == num_all_people:
             if output:
@@ -412,9 +402,10 @@ def run_simulation(shuffle_every=1,
 
 
 inf, dead, rec = run_simulation(3, output=False)
+BOARD_HISTORY.append(BOARD)
 
 if PLOT_RESULTS:
-    print("plotting data")
+    print("Plotting data")
     plot_data(inf, dead, rec, START_EMERGENCY, START_DEEPENING,
               START_RECOVERING, vir_sev, inf_chance)
     print("Saved plots")

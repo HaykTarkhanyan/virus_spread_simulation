@@ -10,7 +10,7 @@ from plot_utils import plot_data
 BOARD_HEIGHT = 50
 BOARD_WIDTH = 50
 
-INFECTION_CHANCE = 0.9
+INFECTION_CHANCE = 0.8
 INFECTING_OPTION = "line"
 INITIAL_INFECTED = 2
 SEVERENESS = 0.3
@@ -32,6 +32,7 @@ inf_chance = INFECTION_CHANCE
 
 PLOT_RESULTS = True
 
+
 def initialize_board(width, height):
     """
     Returns 2-D array with shape (width,
@@ -47,6 +48,7 @@ BOARD = initialize_board(BOARD_HEIGHT, BOARD_WIDTH)
 BOARD_HISTORY = [BOARD]
 SHUFFLE_HISTORY = [[]]
 SHUFFLE_COUNT = 0
+
 
 def infect(person, dose_min=SEVERENESS, dose_dev=SEVERENESS / 2):
     """
@@ -185,12 +187,12 @@ def infect_neighbors(person, option=INFECTING_OPTION):
 
     Arguments:
 
-    person: list, tuple, or array, 
+    person: list, tuple, or array,
     indicates person's location on the board
     option (default=INFECTING_OPTION): defines the common
     element of two neighbors. Values: ["line", "point"].
     '''
-    
+
     if option == "point":
         neighbors = np.array([(i, j)
                               for i in range(person[0] - 1, person[0] + 2)

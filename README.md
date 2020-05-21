@@ -29,7 +29,8 @@ We have following parameters to play with:
 **PLOT_RESULTS** - wearher to save the results
 Currently we save the gif by default
 
-# not globals but parameters to run_simulation
+###not globals but parameters to run_simulation
+
 **shuffle_every** (def: 1), - Every n day people change their location
 **shuffle_qunatity** (def :BOARD_HEIGHT * BOARD_WIDTH // 10) how many people to shuffle
 

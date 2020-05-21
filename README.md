@@ -19,9 +19,9 @@ RECOVERY_RATE (default: 0.3)
 SEVERNESS_DECAY (default: 0.95)
 *Rate by which VIRUS_SEVERNES drops after we begin recovering*
 
-START_DEEPENING (default: 5)   -  after N th day the health will slowly get worse
-START_EMERGENCY (default: 10)  -  we drop the transportation and number of people treveling
-START_RECOVERING (default: 15) -  People start to recover
+START_DEEPENING (default: 4)   -  after N th day the health will slowly get worse
+START_EMERGENCY (default: 8)  -  we drop the transportation and number of people treveling
+START_RECOVERING (default: 9) -  People start to recover
 
 PLOT_RESULTS - wearher to save the results
 Currently we save the gif by default
@@ -31,15 +31,5 @@ shuffle_qunatity (def :BOARD_HEIGHT * BOARD_WIDTH // 10) how many people to shuf
 transportation_drop (def : 3) - After emergancy was declared how many times
                                 to decrease shuffle_quantitu
 infection_drop( def: 2) - like transportation drop but with virus severness
-
-
-
-
-Every morning the following happens:
-All infecteds peoples health codtination vatanuma
-All alive infecteds try to infect their neigbors
-Depending on which day it is ingectets health lavanuma
-virus severness drops aaaaaaaaaaaaaa, Apr lav chi etum sec
-
 
 

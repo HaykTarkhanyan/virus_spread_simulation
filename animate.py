@@ -1,13 +1,13 @@
-import pygame
-from math import sin, cos
-from animate_helpers import get_angle, get_distance, coordinate_from_position
 import main
+import pygame
+from PIL import Image
+from math import sin, cos
+from imageio import mimsave
+from animate_helpers import get_angle, get_distance, coordinate_from_position
 
-# ----- not needed, added for testing
-from random import randrange, shuffle
-# !----------------------------------
 
-SCREEN_SIZE = (900, 600)
+SCREEN_SIZE = (1000, 1000)
+WAITING_TIME = 0  # period between days in ms's
 
 animation_done = False
 
@@ -103,76 +103,63 @@ class Board:
 
 board = Board((len(main.BOARD_HISTORY[0]), len(main.BOARD_HISTORY[0][0])))
 
-# Define colors
-BG_COLOR = pygame.Color("#F0F0F0")
-MAIN_COLOR = pygame.Color("#0792D6")
-
 # Setup
 pygame.init()
 
-# Set the width and height of the screen [width,height]
+# Set the width and height of the screen [width, height]
 size = SCREEN_SIZE
 screen = pygame.display.set_mode(size)
 
-pygame.display.set_caption("spread simulation")
+pygame.display.set_caption("Spread Simulation")
 
-# Loop until the user clicks the close button.
-done = False
-
-# Used to manage how fast the screen updates
-clock = pygame.time.Clock()
-
+# For creating a gif
+frames = []
 
 # -------- Main Program Loop -----------
-while not done:
-    # EVENT PROCESSING
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            done = True
-
+while count_ < len(main.BOARD_HISTORY):
+    
+    # TAKING A SCREENSHOT
+    frames.append(Image.frombytes("RGB", SCREEN_SIZE,
+                pygame.image.tostring(pygame.display.get_surface(), "RGB")))
+    
     # GAME LOGIC
-
-    # ----- not needed, added for testing
-    if count_ < len(main.BOARD_HISTORY):
+    if count_ < len(main.BOARD_HISTORY) - 1:
+        BOARD = main.BOARD_HISTORY[count_]
+        shuffle = []
+        
+        if count_ < len(main.SHUFFLE_HISTORY) - 1:
+            for i in main.SHUFFLE_HISTORY[count_ + 1]:
+                shuffle.append(i)
+            animate_squares(board, shuffle)
+            
         for square in board.squares:
-            BOARD = main.BOARD_HISTORY[count_]
+            BOARD = main.BOARD_HISTORY[count_ + 1]
             index = BOARD[square.position[0]][square.position[1]]
-            if index == 0:  # asel e te "if not index:"
+            if index == 0:
                 square.b = square.r = 0
                 square.g = 255
             elif index < 1:
-                square.b = 0
+                square.b = square.g = 0
                 square.r = 255 * index
-                square.g = 0
             elif index == 69:
-                square.r = 0
+                square.r = square.g = 0
                 square.b = 190
-                square.g = 0
-            elif index == 1:
-                square.r = 0
-                square.b = 0
-                square.g = 0
-            shuffle = []
-        if count_ < len(main.SHUFFLE_HISTORY):
-            for i in main.SHUFFLE_HISTORY[count_]:
-                shuffle.append(i)
-            # animate_squares(board, shuffle)
-            count_ += 1
+            else:
+                square.r = square.b = square.g = 0
+        
+    count_ += 1
 
     # -----------------------------------
 
-    # Get Mouse Position
-    #mousepos = pygame.mouse.get_pos()
-    #mousex = mousepos[0]
-    #mousey = mousepos[1]
-
     # DRAW
-    screen.fill(BG_COLOR)
     board.display_squares()
 
     # Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
-    pygame.time.wait(650)
+    pygame.time.wait(WAITING_TIME)
+
+# Create a gif
+mimsave("virus.gif", frames, duration=WAITING_TIME / 1000)
 
 # Close the window and quit.
 # If you forget this line, the program will 'hang'

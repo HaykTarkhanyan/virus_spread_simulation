@@ -1,9 +1,12 @@
 This is a toy simulation of how a virus spreads.
 
-**Note**: There isn't argpatser now, so you'll need to change parameters directly from the file
+**Note**: There isn't argparser now, so you'll need to change parameters directly from the file
 
-![vir_sim](https://github.com/HaykTarkhanyan/virus_spread_simulation/blob/master/moviee.gif)
 
+<p float="left">
+<img src="https://github.com/HaykTarkhanyan/virus_spread_simulation/blob/master/moviee.gif" alt = "spread_gif" width="45%" height = "45%" >
+<img src="https://github.com/HaykTarkhanyan/virus_spread_simulation/blob/master/virus.gif" alt = "spread_gif" width="45%" height = "45%" >
+</p>
 
 We have following parameters to play with:
 
@@ -26,8 +29,8 @@ We have following parameters to play with:
 **START_EMERGENCY** (default: 8)  -  we drop the transportation and number of people treveling              
 **START_RECOVERING** (default: 9) -  People start to recover                  
 
-**PLOT_RESULTS** - wearher to save the results
-Currently we save the gif by default
+**PLOT_RESULTS** - weather to save the results
+Currently, we save the gif by default
 
 ###not globals but parameters to run_simulation
 

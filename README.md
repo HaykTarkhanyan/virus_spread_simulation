@@ -3,8 +3,8 @@ This is a toy simulation of how a virus spreads.
 **Note**: There isn't argparser now, so you'll need to change parameters directly from the file
 
 GREEN - not infected  
-BLUE - recovered
-RED - infected(shade indicates how bad is the condition)
+BLUE - recovered  
+RED - infected(shade indicates how bad is the condition)   
 BlACK - dead
 <p float="left">
 <img src="https://github.com/HaykTarkhanyan/virus_spread_simulation/blob/master/demo_1.gif" alt = "spread_gif" width="49%" height = "49%" >

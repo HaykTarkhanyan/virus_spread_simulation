@@ -2,10 +2,12 @@ This is a toy simulation of how a virus spreads.
 
 **Note**: There isn't argparser now, so you'll need to change parameters directly from the file
 
-
+GREEN - not infected  
+BLUE - recovered  
+BlACK - dead
 <p float="left">
-<img src="https://github.com/HaykTarkhanyan/virus_spread_simulation/blob/master/moviee.gif" alt = "spread_gif" width="45%" height = "45%" >
-<img src="https://github.com/HaykTarkhanyan/virus_spread_simulation/blob/master/virus.gif" alt = "spread_gif" width="45%" height = "45%" >
+<img src="https://github.com/HaykTarkhanyan/virus_spread_simulation/blob/master/moviee.gif" alt = "spread_gif" width="49%" height = "49%" >
+<img src="https://github.com/HaykTarkhanyan/virus_spread_simulation/blob/master/demo_2.gif" alt = "spread_gif" width="49%" height = "49%" >
 </p>
 
 We have following parameters to play with:

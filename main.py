@@ -56,11 +56,11 @@ def infect(person, dose_min=SEVERENESS, dose_dev=SEVERENESS / 2):
     infection with some initial random dose.
 
     ARGS :
-    person - list, tuple, or array,  indicates persons location on the board
-    dose_min - float or int, is the mu paramtrs of gaussian distrib.
-               default calue - SEVERENESS
-    dose_dev - float or int, is the sigma paramtrs of gaussian distrib.
-               default calue - SEVERENESS / 2
+        person - list, tuple, or array,  indicates persons location on the board
+        dose_min - float or int, is the mu paramtrs of gaussian distrib.
+                   default calue - SEVERENESS
+        dose_dev - float or int, is the sigma paramtrs of gaussian distrib.
+                   default calue - SEVERENESS / 2
     """
     global SEVERENESS
 
@@ -78,7 +78,7 @@ def start_pandemic(num_to_infect=1):
     selected people of given number.
 
     Args:
-    num_to_enfect - int, default value  - 1
+        num_to_enfect - int, default value  - 1
     """
     for i in range(num_to_infect):
         rand_y = np.random.randint(0, BOARD_WIDTH)
@@ -95,8 +95,8 @@ def die(person):
     Kills a person with value 1 or greater,
 
     ARGS:
-    person - list, tuple, or array,
-    indicates person's location on the board
+        person - list, tuple, or array,
+        indicates person's location on the board
     """
     DEAD.append(person)
     INFECTED.remove(person)
@@ -110,12 +110,12 @@ def fully_recover(person):
     given his location, tuple, list or array.
 
     ARGS:
-    person - list, tuple, or array,
-    indicates persons location on the board
+        person - list, tuple, or array,
+        indicates persons location on the board
     """
     RECOVERED.append(person)
     #############
-    BOARD[person[0]][person[1]] = 69
+    BOARD[person[0]][person[1]] = 509
     #############
     INFECTED.remove(person)
 
@@ -187,10 +187,10 @@ def infect_neighbors(person, option=INFECTING_OPTION):
 
     Arguments:
 
-    person: list, tuple, or array,
-    indicates person's location on the board
-    option (default=INFECTING_OPTION): defines the common
-    element of two neighbors. Values: ["line", "point"].
+        person: list, tuple, or array,
+                indicates person's location on the board
+                option (default=INFECTING_OPTION): defines the common
+                element of two neighbors. Values: ["line", "point"].
     '''
 
     if option == "point":
@@ -221,7 +221,7 @@ def multiple_infect(neighbors, chance=INFECTION_CHANCE):
     and for each infects or not randomly.
 
     Args:
-    chance - int, default - INFECTION_CHANCE
+        chance - int, default - INFECTION_CHANCE
     """
     num_of_people = neighbors.shape[0]
     possibs = np.random.random([num_of_people, 1])
@@ -280,8 +280,8 @@ def multiple_recover(infecteds, mu=RECOVERY_RATE, sigma=RECOVERY_RATE / 2):
 
     Args:
 
-    infecteds - np.array, or list of tuples
-    coefficent, sigma - Gaussian distribution parameters
+        infecteds - np.array, or list of tuples
+        coefficent, sigma - Gaussian distribution parameters
 
     """
     for infected in infecteds[:]:

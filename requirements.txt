@@ -1,5 +1,5 @@
 matplotlib==3.2.1
-numpy==1.18.2
+numpy==1.22.0
 pygame==1.9.6
 imageio==2.8.0
 pillow==7.1.0
